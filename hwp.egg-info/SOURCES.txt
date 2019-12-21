@@ -1,0 +1,7 @@
+setup.cfg
+setup.py
+hwp.egg-info/PKG-INFO
+hwp.egg-info/SOURCES.txt
+hwp.egg-info/dependency_links.txt
+hwp.egg-info/not-zip-safe
+hwp.egg-info/top_level.txt

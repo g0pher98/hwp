@@ -1,0 +1,16 @@
+Metadata-Version: 1.2
+Name: hwp
+Version: 0.0.1
+Summary: Python Hangul Word Press Library
+Home-page: https://github.com/g0pher98/hwp
+Author: Lee Jae Seung, Lee Hyo Jin, (정예림)
+Author-email: g0pher98@naver.com
+License: UNKNOWN
+Download-URL: https://github.com/g0pher98/hwp/archive/(version.tar.gz)
+Description: UNKNOWN
+Keywords: hwp,pyhwp,hangul
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3.4
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Programming Language :: Python :: 3.7
+Requires-Python: >=3
