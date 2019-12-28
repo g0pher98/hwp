@@ -2,9 +2,9 @@ from setuptools import setup, find_packages
 
 setup(
 	name				= 'hwp',
-	version				= '0.0.1',
+	version				= '0.0.999',
 	description			= 'Python Hangul Word Press Library',
-	author				= 'Lee Jae Seung, Lee Hyo Jin, (정예림)',
+	author				= 'Lee Jae Seung, Lee Hyo Jin, Jeong Yerim',
 	author_email		= 'g0pher98@naver.com',
 	url					= 'https://github.com/g0pher98/hwp',
 	download_url		= 'https://github.com/g0pher98/hwp/archive/(version.tar.gz)',

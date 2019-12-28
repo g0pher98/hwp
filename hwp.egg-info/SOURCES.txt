@@ -1,5 +1,7 @@
+README.md
 setup.cfg
 setup.py
+hwp/__init__.py
 hwp.egg-info/PKG-INFO
 hwp.egg-info/SOURCES.txt
 hwp.egg-info/dependency_links.txt
