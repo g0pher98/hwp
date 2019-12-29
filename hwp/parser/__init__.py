@@ -2,6 +2,45 @@ def load():
 	f = open("test.hwp",'rb')
 	return f.read()
 
+def make_stream_chain(raw, block_number, property_start):
+	'''
+	@author : Lee Jae Seung
+	
+	체인을 구성하는 함수.
+	'''
+	block_raw = get_block(raw, block_number)
+	block_list = [block_raw[i:i+4] for i in range(0, len(block_raw), 4)]
+	idx = property_start
+	chain = [idx]
+	while True:
+		idx = int.from_bytes(block_list[idx], "little")
+		if idx == int.from_bytes(b'\xfd\xff\xff\xff', "little"):
+			# special block
+			break
+		elif idx == int.from_bytes(b'\xfe\xff\xff\xff', "little"):
+			# end
+			break
+		elif idx == int.from_bytes(b'\xff\xff\xff\xff', "little"):
+			# non used block
+			break
+		else:
+			chain.append(idx)
+	return chain
+
+def chain2stream(raw, chain):
+	'''
+	@author : Lee Jae Seung
+	
+	만들어진 체인 정보를 이용하여 블록을 이어서 스트림을 구성하는 함수.
+	'''
+	stream = b''
+	for block_number in chain:
+		stream += get_block(raw, block_number)
+	return stream
+		
+		
+		
+
 def header(raw):
 	'''
 	[INFO]
@@ -40,3 +79,17 @@ def get_block(raw, number):
 	'''
 	idx = (number+1) * 512
 	return raw[idx:idx + 512]
+
+
+# ======= 여기부터는 문서만 보고 우선적으로 개발한 부분 ====
+
+def fileheader(raw):
+	data = {}
+	data['signature'] = raw[0:32]
+	data['version'] = {
+		'MM' : raw[32],
+		'nn' : raw[33],
+		'PP' : raw[34],
+		'rr' : raw[35]
+	}
+	data['']
