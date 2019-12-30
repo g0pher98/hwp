@@ -57,13 +57,14 @@ def header(raw):
 	SBAT_start : SBAT 시작블록 번호
 	BBAT_array : BBAT의 블록 정보가 담긴 배열(각 4bytes)
 	'''
-	data = {}
-	data['signature'] = raw[0:8]
-	data['number_of_BBAT_Depot'] = int.from_bytes(raw[44:48], "little")
-	data['number_of_SBAT_Depot'] = int.from_bytes(raw[64:68], "little")
-	data['property_start'] = int.from_bytes(raw[48:52], "little")
-	data['SBAT_start'] = int.from_bytes(raw[60:64], "little")
-	data['BBAT_array'] = []
+	data = {
+		'signature' : raw[0:8],
+		'number_of_BBAT_Depot' : int.from_bytes(raw[44:48], "little"),
+		'number_of_SBAT_Depot' : int.from_bytes(raw[64:68], "little"),
+		'property_start' : int.from_bytes(raw[48:52], "little"),
+		'SBAT_start' : int.from_bytes(raw[60:64], "little"),
+		'BBAT_array' : []
+	}
 	bbat_array_length = data['number_of_BBAT_Depot']*4
 	bbat_array = raw[76:76 + bbat_array_length]
 	for idx in range(0, len(bbat_array), 4):
@@ -84,12 +85,49 @@ def get_block(raw, number):
 # ======= 여기부터는 문서만 보고 우선적으로 개발한 부분 ====
 
 def fileheader(raw):
-	data = {}
-	data['signature'] = raw[0:32]
-	data['version'] = {
-		'MM' : raw[32],
-		'nn' : raw[33],
-		'PP' : raw[34],
-		'rr' : raw[35]
+	'''
+	@author : Lee Jae Seung
+	
+	FileHeader 스트림 파싱함수.
+	hwp 구조 5.0 문서 8page 참고하여 개발.
+	'''
+	data = {
+		'signature' : raw[0:32],
+		'version' : {
+			'MM' : raw[32],
+			'nn' : raw[33],
+			'PP' : raw[34],
+			'rr' : raw[35]
+		},
+		'property' : {
+			'compressed' : ,
+			'password' : ,
+			'distribution' : ,
+			'script' : ,
+			'DRM' : ,
+			'XML_template_stroage' : ,
+			'document_history' : ,
+			'electronic_signature' : ,
+			'authorized_certificate' : ,
+			'electronic_signature_tmp' : ,
+			'authorized_certificate_DRM' : ,
+			'CCL' : ,
+			'mobile' : ,
+			'privacy' : ,
+			'modify_trace' : ,
+			'KOGL' : ,
+			'video_control' : ,
+			'index_fild_control' : ,
+			'reservation' : 	
+		},
+		'licence' : {
+			'CCL' : ,
+			'not_copy' : ,
+			'same_copy' : ,
+			'reservation' : 
+		},
+		'EncryptVersion' : ,
+		'KOGL' : ,
+		'reservation' :
 	}
-	data['']
+	return data
