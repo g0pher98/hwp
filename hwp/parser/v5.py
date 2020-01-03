@@ -2,45 +2,59 @@ def fileheader(raw):
 	'''
 	:path: /FileHeader
 	:document: hwp v5.0 8page
+	
+import olefile, pprint
+import hwp.parser.v5 as v5
+fh_data = olefile.OleFileIO("test.hwp").openstream('FileHeader').read()
+pprint.pprint(v5.fileheader(fh_data))
 	'''
+	_property = '{0:032b}'.format(int.from_bytes(raw[36:40], "big"))
+	_copyright = '{0:032b}'.format(int.from_bytes(raw[40:44], "big"))
+	_encversion = {
+		0 : None,
+		1 : "한글 2.5 버전 이하",
+		2 : "한글 3.0 버전 Enhanced",
+		3 : "한글 3.0 버전 Old",
+		4 : "한글 7.0 버전 이후"
+	}
+	_KOGLsupport = {
+		0 : None, # 0번은 문서에 기록되어있지 않음.
+		6 : 'KOR',
+		15 : 'US'
+	}
 	data = {
 		'signature' : raw[0:32],
-		'version' : {
-			'MM' : raw[32],
-			'nn' : raw[33],
-			'PP' : raw[34],
-			'rr' : raw[35]
-		},
+		'version' : '.'.join([str(i) for i in list(raw[32:36])[::-1]]),
 		'문서 속성' : {
-			'압축 여부' : None,
-			'암호 설정 여부' : None,
-			'배포용 문서 여부' : None,
-			'스크립트 저장 여부' : None,
-			'DRM 보안 문서 여부' : None,
-			'XMLTemplate 스토리지 존재 여부' : None,
-			'문서 이력 관리 존재 여부' : None,
-			'전자 서명 정보 존재 여부' : None,
-			'공인 인증서 암호화 여부' : None,
-			'전자 서명 예비 저장 여부' : None,
-			'공인 인증서 DRM 보안 문서 여부' : None,
-			'CCL 문서 여부' : None,
-			'모바일 최적화 여부' : None,
-			'개인정보 보안 문서 여부' : None,
-			'변경 추적 문서 여부' : None,
-			'공공누리(KOGL) 저작권 문서' : None,
-			'비디오 컨트롤 포함 여부' : None,
-			'차례 필드 컨트롤 포함 여부' : None,
-			'예약' : None
+			'압축 여부' : bool(_property[0]),
+			'암호 설정 여부' : bool(_property[1]),
+			'배포용 문서 여부' : bool(_property[2]),
+			'스크립트 저장 여부' : bool(_property[3]),
+			'DRM 보안 문서 여부' : bool(_property[4]),
+			'XMLTemplate 스토리지 존재 여부' : bool(_property[5]),
+			'문서 이력 관리 존재 여부' : bool(_property[6]),
+			'전자 서명 정보 존재 여부' : bool(_property[7]),
+			'공인 인증서 암호화 여부' : bool(_property[8]),
+			'전자 서명 예비 저장 여부' : bool(_property[9]),
+			'공인 인증서 DRM 보안 문서 여부' : bool(_property[10]),
+			'CCL 문서 여부' : bool(_property[11]),
+			'모바일 최적화 여부' : bool(_property[12]),
+			'개인정보 보안 문서 여부' : bool(_property[13]),
+			'변경 추적 문서 여부' : bool(_property[14]),
+			'공공누리(KOGL) 저작권 문서' : bool(_property[15]),
+			'비디오 컨트롤 포함 여부' : bool(_property[16]),
+			'차례 필드 컨트롤 포함 여부' : bool(_property[17]),
+			'예약' : _property[18:]
 		},
 		'저작권 속성' : {
-			'CCL' : None,
-			'복제 제한 여부' : None,
-			'동일 조건 하에 복제 허가 여부' : None,
-			'예약' : None
+			'CCL' : _copyright[0],
+			'복제 제한 여부' : _copyright[1],
+			'동일 조건 하에 복제 허가 여부' : _copyright[2],
+			'예약' : _copyright[3:]
 		},
-		'EncryptVersion' : None,
-		'공공누리(KOGL) 라이선스 지원 국가' : None,
-		'예약' : None
+		'EncryptVersion' : _encversion[int.from_bytes(raw[44:48], "little")],
+		'공공누리(KOGL) 라이선스 지원 국가' : _KOGLsupport[raw[48]],
+		'예약' : raw[49:]
 	}
 	return data
 
@@ -132,4 +146,5 @@ def hwpsummaryinformation():
 		'HWPPIDSI_PARACOUNT' : None
 	}
 	return data
+
 
