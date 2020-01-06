@@ -8,8 +8,7 @@ python3 -m pip install hwp
 
 # contact
 [Lee Jae Seung(이재승)](g0pher.kr)  
-[Lee Hyo Jin(이효진)]()  
-[Jeong Yerim(정예림)]()  
+[Lee Hyo Jin(이효진)]()   
 
 # Reference
 This library is developed by referring to the Hancom's [HWP document file (.hwp)](https://www.hancom.com/etc/hwpDownload.do)  

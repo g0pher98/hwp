@@ -1,13 +1,31 @@
+
+def test():
+	import olefile, pprint
+	import hwp.parser.v5 as v5
+	fh_data = olefile.OleFileIO("test.hwp").openstream('FileHeader').read()
+	pprint.pprint(v5.fileheader(fh_data))
+
+	
+class Reader:
+	def __init__(self, raw, start_index=0):
+		self.focus = start_index
+		self.data = raw
+		return
+	def pop(self, size, ):
+		poped_data = data[focus:focus+size]
+		focus += size
+		return poped_data
+	def intpop(size, endian="little")
+		poped_data = int.from_bytes(data[focus:focus+size], endian)
+		focus += size
+		return poped_data
+	
 def fileheader(raw):
 	'''
 	:path: /FileHeader
-	:document: hwp v5.0 8page
-	
-import olefile, pprint
-import hwp.parser.v5 as v5
-fh_data = olefile.OleFileIO("test.hwp").openstream('FileHeader').read()
-pprint.pprint(v5.fileheader(fh_data))
+	:document: [hwp v5.0] Page 8
 	'''
+	reader = Reader(raw)
 	_property = '{0:032b}'.format(int.from_bytes(raw[36:40], "big"))
 	_copyright = '{0:032b}'.format(int.from_bytes(raw[40:44], "big"))
 	_encversion = {
@@ -22,7 +40,7 @@ pprint.pprint(v5.fileheader(fh_data))
 		6 : 'KOR',
 		15 : 'US'
 	}
-	data = {
+	structure = {
 		'signature' : raw[0:32],
 		'version' : '.'.join([str(i) for i in list(raw[32:36])[::-1]]),
 		'문서 속성' : {
@@ -56,43 +74,73 @@ pprint.pprint(v5.fileheader(fh_data))
 		'공공누리(KOGL) 라이선스 지원 국가' : _KOGLsupport[raw[48]],
 		'예약' : raw[49:]
 	}
-	return data
+	return structure
 
 def docinfo(raw):
 	'''
 	:path: /DocInfo
-	:document: hwp v5.0 9page
+	:document: [hwp v5.0] Page 9, 18, 19
 	'''
-	data = {
-		'HWPTAG_DOCUMENT_PROPERTIES' : 30,
-		'HWPTAG_ID_MAPPINGS' : 32,
+	structure = {
+		'HWPTAG_DOCUMENT_PROPERTIES' : None, #30
+		'HWPTAG_ID_MAPPINGS' : None, #32
 		'HWPTAG_BIN_DATA' : None,
 		'HWPTAG_FACE_NAME' : None,
 		'HWPTAG_BORDER_FILL' : None,
-		'HWPTAG_CHAR_SHAPE' : 72,
-		'HWPTAG_TAB_DEF' : 14,
+		'HWPTAG_CHAR_SHAPE' : None, #72
+		'HWPTAG_TAB_DEF' : None, #14
 		'HWPTAG_NUMBERING' : None,
-		'HWPTAG_BULLET' : 10,
-		'HWPTAG_PARA_SHAPE' : 54,
+		'HWPTAG_BULLET' : None, #10
+		'HWPTAG_PARA_SHAPE' : None, #54
 		'HWPTAG_STYLE' : None,
-		'HWPTAG_MEMO_SHAPE' : 22,
+		'HWPTAG_MEMO_SHAPE' : None, #22
 		'HWPTAG_TRACK_CHANGE_AUTHOR' : None,
 		'HWPTAG_TRACK_CHANGE' : None,
 		'HWPTAG_DOC_DATA' : None,
 		'HWPTAG_FORBIDDEN_CHAR' : None,
-		'HWPTAG_COMPATIBLE_DOCUMENT' : 4,
-		'HWPTAG_LAYOUT_COMPATIBILITY' : 20,
-		'HWPTAG_DISTRIBUTE_DOC_DATA' : 256,
-		'HWPTAG_TRACKCHANGE' : 1032
+		'HWPTAG_COMPATIBLE_DOCUMENT' : None, #4
+		'HWPTAG_LAYOUT_COMPATIBILITY' : None, #20
+		'HWPTAG_DISTRIBUTE_DOC_DATA' : None, #256
+		'HWPTAG_TRACKCHANGE' : None #1032
 	}
-	return data
+	reader = Reader(raw)
+	structure['HWPTAG_DOCUMENT_PROPERTIES'] = reader.pop(30)
+	structure['HWPTAG_ID_MAPPINGS'] = reader.pop(32)
+	
+	def HWPTAG_BIN_DATA():
+		'''
+		:reference: [hwp v5.0] Page 19, Cell 18
+		'''
+		structure = {}
+		structure['property'] = reader.pop(2)
+		size = reader.intpop(2)
+		data = reader.pop(2*data)
+		structure['LINK1_SIZE'] = size
+		structure['LINK1'] = data
+		size = reader.intpop(2)
+		data = reader.pop(2*data)
+		structure['LINK2_SIZE'] = size
+		structure['LINK2'] = data
+		structure['BINDATASTORAGE ID'] = reader.intpop(2)
+		size = reader.intpop(2)
+		data = reader.pop(2*data)
+		structure['EMBEDDING_SIZE'] = size
+		structure['EMBEDDING'] = data
+		return structure
+	
+
+	
+
+	# HWPTAG_FACE_NAME
+	
+	return structure
 
 def bodytext_section(raw):
 	'''
 	:path: /BodyText/SectionN
-	:document: hwp v5.0 9-10page
+	:document: [hwp v5.0] 9-10page
 	'''
-	data = {
+	structure = {
 		'HWPTAG_PARA_HEADER' : 22,
 		'HWPTAG_PARA_TEXT' : None,
 		'HWPTAG_PARA_CHAR_SHAPE' : None,
@@ -123,14 +171,14 @@ def bodytext_section(raw):
 		'HWPTAG_VIDEO_DATA' : None,
 		'HWPTAG_SHAPE_COMPONENT_UNKNOWN' : 36
 	}
-	return data
+	return structure
 
 def hwpsummaryinformation():
 	'''
 	:path: /\005HwpSummaryInformation
-	:document: hwp v5.0 12page
+	:document: [hwp v5.0] 12page
 	'''
-	data = {
+	structure = {
 		'PIDSI_TITLE' : None,
 		'PIDSI_SUBJECT' : None,
 		'PIDSI_AUTHOR' : None,
@@ -145,6 +193,6 @@ def hwpsummaryinformation():
 		'HWPPIDSI_DATE_STR' : None,
 		'HWPPIDSI_PARACOUNT' : None
 	}
-	return data
+	return structure
 
 
