@@ -4,6 +4,7 @@ def test():
 	import hwp.parser.v5 as v5
 	fh_data = olefile.OleFileIO("test.hwp").openstream('FileHeader').read()
 	pprint.pprint(v5.fileheader(fh_data))
+	pprint.pprint(v5.docinfo(fh_data[256:]))
 
 	
 class Reader:
@@ -74,7 +75,7 @@ def fileheader(raw):
 		'공공누리(KOGL) 라이선스 지원 국가' : _KOGLsupport[raw[48]],
 		'예약' : raw[49:]
 	}
-	return structure
+	return {'FileHeader':structure, 'size':256}
 
 def docinfo(raw):
 	'''
@@ -106,32 +107,90 @@ def docinfo(raw):
 	reader = Reader(raw)
 	structure['HWPTAG_DOCUMENT_PROPERTIES'] = reader.pop(30)
 	structure['HWPTAG_ID_MAPPINGS'] = reader.pop(32)
+	structure['HWPTAG_BIN_DATA'] = HWPTAG_BIN_DATA()
+	structure['HWPTAG_FACE_NAME'] = HWPTAG_FACE_NAME()
+	structure['HWPTAG_BORDER_FILL'] = HWPTAG_BORDER_FILL()
+	structure['HWPTAG_CHAR_SHAPE'] = reader.pop(72)
+	structure['HWPTAG_TAB_DEF'] = reader.pop(14)
+	structure['HWPTAG_NUMBERING'] = HWPTAG_NUMBERING()
+	structure['HWPTAG_BULLET'] = reader.pop(10)
+	structure['HWPTAG_PARA_SHAPE'] = reader.pop(54)
+	structure['HWPTAG_STYLE'] = HWPTAG_STYLE()
+	structure['HWPTAG_MEMO_SHAPE'] = reader.pop(22)
+	structure['HWPTAG_TRACK_CHANGE_AUTHOR'] = HWPTAG_TRACK_CHANGE_AUTHOR()
+	structure['HWPTAG_TRACK_CHANGE'] = HWPTAG_TRACK_CHANGE()
+	structure['HWPTAG_DOC_DATA'] = HWPTAG_DOC_DATA()
+	structure['HWPTAG_FORBIDDEN_CHAR'] = HWPTAG_FORBIDDEN_CHAR()
+	structure['HWPTAG_COMPATIBLE_DOCUMENT'] = reader.pop(4)
+	structure['HWPTAG_LAYOUT_COMPATIBILITY'] = reader.pop(20)
+	structure['HWPTAG_DISTRIBUTE_DOC_DATA'] = reader.pop(256)
+	structure['HWPTAG_TRACKCHANGE'] = reader.pop(1032)
 	
 	def HWPTAG_BIN_DATA():
 		'''
 		:reference: [hwp v5.0] Page 19, Cell 18
 		'''
-		structure = {}
-		structure['property'] = reader.pop(2)
+		structure = {
+			'property' : None, # 속성
+			'link1_size' : None,
+			# Type이 "LINK"일 때, 연결 파일의 절대 경로 길이 (len1)
+			'link1' : None,
+			# Type이 "LINK"일 때, 연결 파일의 절대 경로
+			'link2_size' : None,
+			# Type이 "LINK"일 때, 연결 파일의 상대 경로 길이 (len2)
+			'link2' : None,
+			# Type이 "LINK"일 때, 연결 파일의 상대 경로
+			'bindatastorage_id' : None,
+			# Type이 "EMBEDDING"이나 "STORAGE"일 때, BINDATASTORAGE 데이터의 아이디
+			'embedding_size' : None,
+			# Type이 "EMBEDDING"일 때, 바이너리 데이터의 형식 이름의 길이 (len3)
+			'embedding' : None
+			# Type이 "EMBEDDING"일 때 extension("." 제외)
+		}
+		properties = reader.pop(2)
+		structure['property'] = properties
+		'''
+		[TODO]
+		properties를 비트로 변환하고, 딕셔너리로 만들어서 넣을 예정.
+		19 page의 표18(바이너리 데이터 속성) 참고.
+		'''
 		size = reader.intpop(2)
 		data = reader.pop(2*data)
-		structure['LINK1_SIZE'] = size
-		structure['LINK1'] = data
+		structure['link1_size'] = size
+		structure['link1'] = data
+		
 		size = reader.intpop(2)
 		data = reader.pop(2*data)
-		structure['LINK2_SIZE'] = size
-		structure['LINK2'] = data
-		structure['BINDATASTORAGE ID'] = reader.intpop(2)
+		structure['link2_size'] = size
+		structure['link2'] = data
+		structure['bindatastorage_id'] = reader.intpop(2)
+		
 		size = reader.intpop(2)
 		data = reader.pop(2*data)
-		structure['EMBEDDING_SIZE'] = size
-		structure['EMBEDDING'] = data
+		structure['embedding_size'] = size
+		structure['embedding'] = data
 		return structure
 	
+	def HWPTAG_FACE_NAME():
+		structure = {
+			'property' : None,
+			'fontname_len' : None,
+			'fontname' : None,
+			'replaced_fonttype' : None,
+			'replaced_fontname_len' : None,
+			'replaced_fontname' : None,
+			'fonttype_info' : None,
+			
+		}
+		properties = reader.intpop(1)
+		structure['property'] = properties
+		'''
+		[TODO]
+		더 개발 예정.
+		'''
+		return
 
-	
 
-	# HWPTAG_FACE_NAME
 	
 	return structure
 
