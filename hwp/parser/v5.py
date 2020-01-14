@@ -131,24 +131,24 @@ def docinfo(raw):
 		:reference: [hwp v5.0] Page 19, Cell 18
 		'''
 		structure = {
-			'property' : None, # 속성
-			'link1_size' : None,
+			'PROPERTY' : None, # 속성
+			'LINK1_SIZE' : None,
 			# Type이 "LINK"일 때, 연결 파일의 절대 경로 길이 (len1)
-			'link1' : None,
+			'LINK1' : None,
 			# Type이 "LINK"일 때, 연결 파일의 절대 경로
-			'link2_size' : None,
+			'LINK2_SIZE' : None,
 			# Type이 "LINK"일 때, 연결 파일의 상대 경로 길이 (len2)
-			'link2' : None,
+			'LINK2' : None,
 			# Type이 "LINK"일 때, 연결 파일의 상대 경로
-			'bindatastorage_id' : None,
+			'BINDATASTORAGE_ID' : None,
 			# Type이 "EMBEDDING"이나 "STORAGE"일 때, BINDATASTORAGE 데이터의 아이디
-			'embedding_size' : None,
+			'EMBEDDING_SIZE' : None,
 			# Type이 "EMBEDDING"일 때, 바이너리 데이터의 형식 이름의 길이 (len3)
-			'embedding' : None
+			'EMBEDDING' : None
 			# Type이 "EMBEDDING"일 때 extension("." 제외)
 		}
 		properties = reader.pop(2)
-		structure['property'] = properties
+		structure['PROPERTY'] = properties
 		'''
 		[TODO]
 		properties를 비트로 변환하고, 딕셔너리로 만들어서 넣을 예정.
@@ -156,40 +156,89 @@ def docinfo(raw):
 		'''
 		size = reader.intpop(2)
 		data = reader.pop(2*data)
-		structure['link1_size'] = size
-		structure['link1'] = data
+		structure['LINK1_SIZE'] = size
+		structure['LINK1'] = data
 		
 		size = reader.intpop(2)
 		data = reader.pop(2*data)
-		structure['link2_size'] = size
-		structure['link2'] = data
-		structure['bindatastorage_id'] = reader.intpop(2)
+		structure['LINK2_SIZE'] = size
+		structure['LINK2'] = data
+		structure['BINDATASTORAGE_ID'] = reader.intpop(2)
 		
 		size = reader.intpop(2)
 		data = reader.pop(2*data)
-		structure['embedding_size'] = size
-		structure['embedding'] = data
+		structure['EMBEDDING_SIZE'] = size
+		structure['EMBEDDING'] = data
 		return structure
 	
 	def HWPTAG_FACE_NAME():
 		structure = {
-			'property' : None,
-			'fontname_len' : None,
-			'fontname' : None,
-			'replaced_fonttype' : None,
-			'replaced_fontname_len' : None,
-			'replaced_fontname' : None,
-			'fonttype_info' : None,
+			'PROPERTY' : None,
+			'FONTNAME_LEN' : None,
+			'FONTNAME' : None,
+			'REPLACED_FONTTYPE' : None,
+			'REPLACED_FONTNAME_LEN' : None,
+			'REPLACED_FONTNAME' : None,
+			'FONTTYPE_INFO' : None,
 			
 		}
 		properties = reader.intpop(1)
 		structure['property'] = properties
 		'''
 		[TODO]
-		더 개발 예정.
+		미완.
+		'''
+		return
+	
+	def HWPTAG_BORDER_FILL():
+		'''
+		[TODO]
+		미완.
 		'''
 		return
 
+	def HWPTAG_NUMBERING():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_STYLE():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_TRACK_CHANGE_AUTHOR():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+
+	def HWPTAG_TRACK_CHANGE():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_DOC_DATA():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	
+	def HWPTAG_FORBIDDEN_CHAR():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
 
 	
 	return structure
@@ -200,36 +249,158 @@ def bodytext_section(raw):
 	:document: [hwp v5.0] 9-10page
 	'''
 	structure = {
-		'HWPTAG_PARA_HEADER' : 22,
+		'HWPTAG_PARA_HEADER' : None, #22
 		'HWPTAG_PARA_TEXT' : None,
 		'HWPTAG_PARA_CHAR_SHAPE' : None,
 		'HWPTAG_PARA_LINE_SEG' : None,
 		'HWPTAG_PARA_RANGE_TAG' : None,
-		'HWPTAG_CTRL_HEADER' : 4 ,
-		'HWPTAG_LIST_HEADER' : 6 ,
-		'HWPTAG_PAGE_DEF' : 40,
-		'HWPTAG_FOOTNOTE_SHAPE' : 30,
-		'HWPTAG_PAGE_BORDER_FILL' : 14,
-		'HWPTAG_SHAPE_COMPONENT' : 4 ,
+		'HWPTAG_CTRL_HEADER' : None, #4
+		'HWPTAG_LIST_HEADER' : None, #6
+		'HWPTAG_PAGE_DEF' : None, #40
+		'HWPTAG_FOOTNOTE_SHAPE' : None, #30
+		'HWPTAG_PAGE_BORDER_FILL' : None, #14
+		'HWPTAG_SHAPE_COMPONENT' : None, #4
 		'HWPTAG_TABLE' : None,
-		'HWPTAG_SHAPE_COMPONENT_LINE' : 20,
-		'HWPTAG_SHAPE_COMPONENT_RECTANGLE' : 9 ,
-		'HWPTAG_SHAPE_COMPONENT_ELLIPSE' : 60,
-		'HWPTAG_SHAPE_COMPONENT_ARC' : 25,
+		'HWPTAG_SHAPE_COMPONENT_LINE' : None, #20
+		'HWPTAG_SHAPE_COMPONENT_RECTANGLE' : None, #9 
+		'HWPTAG_SHAPE_COMPONENT_ELLIPSE' : None, #60
+		'HWPTAG_SHAPE_COMPONENT_ARC' : None, #25
 		'HWPTAG_SHAPE_COMPONENT_POLYGON' : None,
 		'HWPTAG_SHAPE_COMPONENT_CURVE' : None,
-		'HWPTAG_SHAPE_COMPONENT_OLE' : 26,
+		'HWPTAG_SHAPE_COMPONENT_OLE' : None, #26
 		'HWPTAG_SHAPE_COMPONENT_PICTURE' : None,
 		'HWPTAG_CTRL_DATA' : None,
 		'HWPTAG_EQEDIT' : None,
 		'HWPTAG_SHAPE_COMPONENT_TEXTART' : None,
 		'HWPTAG_FORM_OBJECT' : None,
-		'HWPTAG_MEMO_SHAPE' : 22,
-		'HWPTAG_MEMO_LIST' : 4 ,
-		'HWPTAG_CHART_DATA' : 2 ,
+		'HWPTAG_MEMO_SHAPE' : None, #22
+		'HWPTAG_MEMO_LIST' : None, #4
+		'HWPTAG_CHART_DATA' : None, #2
 		'HWPTAG_VIDEO_DATA' : None,
-		'HWPTAG_SHAPE_COMPONENT_UNKNOWN' : 36
+		'HWPTAG_SHAPE_COMPONENT_UNKNOWN' : None #36
 	}
+	reader = Reader(raw)
+	structure['HWPTAG_PARA_HEADER'] = reader.pop(22),
+	structure['HWPTAG_PARA_TEXT'] = HWPTAG_PARA_TEXT(),
+	structure['HWPTAG_PARA_CHAR_SHAPE'] = HWPTAG_PARA_CHAR_SHAPE(),
+	structure['HWPTAG_PARA_LINE_SEG'] = HWPTAG_PARA_LINE_SEG(),
+	structure['HWPTAG_PARA_RANGE_TAG'] = HWPTAG_PARA_RANGE_TAG(),
+	structure['HWPTAG_CTRL_HEADER'] = reader.pop(4),
+	structure['HWPTAG_LIST_HEADER'] = reader.pop(6),
+	structure['HWPTAG_PAGE_DEF'] = reader.pop(40),
+	structure['HWPTAG_FOOTNOTE_SHAPE'] = reader.pop(30),
+	structure['HWPTAG_PAGE_BORDER_FILL'] = reader.pop(14),
+	structure['HWPTAG_SHAPE_COMPONENT'] = reader.pop(4),
+	structure['HWPTAG_TABLE'] = HWPTAG_TABLE(),
+	structure['HWPTAG_SHAPE_COMPONENT_LINE'] = reader.pop(20),
+	structure['HWPTAG_SHAPE_COMPONENT_RECTANGLE'] = reader.pop(9),
+	structure['HWPTAG_SHAPE_COMPONENT_ELLIPSE'] = reader.pop(60),
+	structure['HWPTAG_SHAPE_COMPONENT_ARC'] = reader.pop(25),
+	structure['HWPTAG_SHAPE_COMPONENT_POLYGON'] = HWPTAG_SHAPE_COMPONENT_POLYGON(),
+	structure['HWPTAG_SHAPE_COMPONENT_CURVE'] = HWPTAG_SHAPE_COMPONENT_CURVE(),
+	structure['HWPTAG_SHAPE_COMPONENT_OLE'] = reader.pop(26),
+	structure['HWPTAG_SHAPE_COMPONENT_PICTURE'] = HWPTAG_SHAPE_COMPONENT_PICTURE(),
+	structure['HWPTAG_CTRL_DATA'] = HWPTAG_CTRL_DATA(),
+	structure['HWPTAG_EQEDIT'] = HWPTAG_EQEDIT(),
+	structure['HWPTAG_SHAPE_COMPONENT_TEXTART'] = HWPTAG_SHAPE_COMPONENT_TEXTART(),
+	structure['HWPTAG_FORM_OBJECT'] = HWPTAG_FORM_OBJECT(),
+	structure['HWPTAG_MEMO_SHAPE'] = reader.pop(22),
+	structure['HWPTAG_MEMO_LIST'] = reader.pop(4),
+	structure['HWPTAG_CHART_DATA'] = reader.pop(2),
+	structure['HWPTAG_VIDEO_DATA'] = HWPTAG_VIDEO_DATA(),
+	structure['HWPTAG_SHAPE_COMPONENT_UNKNOWN'] = reader.pop(36)
+	
+	def HWPTAG_PARA_TEXT():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_PARA_CHAR_SHAPE():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_PARA_LINE_SEG():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_PARA_RANGE_TAG():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_TABLE():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_SHAPE_COMPONENT_POLYGON():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_SHAPE_COMPONENT_CURVE():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_SHAPE_COMPONENT_PICTURE():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_CTRL_DATA():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_EQEDIT():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_SHAPE_COMPONENT_TEXTART():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_FORM_OBJECT():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
+	def HWPTAG_VIDEO_DATA():
+		'''
+		[TODO]
+		미완.
+		'''
+		return
+	
 	return structure
 
 def hwpsummaryinformation():
