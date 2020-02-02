@@ -423,6 +423,59 @@ def hwpsummaryinformation():
 		'HWPPIDSI_DATE_STR' : None,
 		'HWPPIDSI_PARACOUNT' : None
 	}
+	'''
+	[TODO]
+	Summary Information에 대한 자세한 설명은 MSDN을 참고라고 써있음. (12page)
+	'''
 	return structure
 
-
+def scripts():
+	'''
+	:path: Scripts/
+	:document: [hwp v5.0] 13page
+	'''
+	structure = {
+		'JScriptVersion' : {
+			'HIGH' : None, #4
+			'LOW' : None #4
+		},
+		'DefalutJScript' : {
+			'HEADER_LENGTH' : None, #4
+			'HEADER' : None,
+			'SOURCE_LENGTH' : None, #4
+			'SOURCE' : None,
+			'PRE_SOURCE_LENGTH' : None, #4
+			'PRE_SOURCE' : None,
+			'POST_SOURCE_LENGTH' : None, #4
+			'POST_SOURCE' : None,
+			'END_FLAG' : None #4
+		}
+	}
+	return structure
+	
+def xmltemplate():
+	'''
+	:path: XMLTemplate/
+	:document: [hwp v5.0] 13page
+	'''
+	structure = {
+		'_SchemaName' : {
+			
+		}
+		'Schema' : {
+			
+		}
+		'Instance' : {
+			
+		}
+	}
+	return structure
+	
+	
+	
+	
+	
+	
+	
+	
+	
