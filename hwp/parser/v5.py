@@ -83,8 +83,8 @@ def docinfo(raw):
 	:document: [hwp v5.0] Page 9, 18, 19
 	'''
 	structure = {
-		'HWPTAG_DOCUMENT_PROPERTIES' : None, #30
-		'HWPTAG_ID_MAPPINGS' : None, #32
+		'HWPTAG_DOCUMENT_PROPERTIES' : None, #26, 표 14
+		'HWPTAG_ID_MAPPINGS' : None, #72
 		'HWPTAG_BIN_DATA' : None,
 		'HWPTAG_FACE_NAME' : None,
 		'HWPTAG_BORDER_FILL' : None,
@@ -105,8 +105,8 @@ def docinfo(raw):
 		'HWPTAG_TRACKCHANGE' : None #1032
 	}
 	reader = Reader(raw)
-	structure['HWPTAG_DOCUMENT_PROPERTIES'] = reader.pop(30)
-	structure['HWPTAG_ID_MAPPINGS'] = reader.pop(32)
+	structure['HWPTAG_DOCUMENT_PROPERTIES'] = reader.pop(26)
+	structure['HWPTAG_ID_MAPPINGS'] = reader.pop(72)
 	structure['HWPTAG_BIN_DATA'] = HWPTAG_BIN_DATA()
 	structure['HWPTAG_FACE_NAME'] = HWPTAG_FACE_NAME()
 	structure['HWPTAG_BORDER_FILL'] = HWPTAG_BORDER_FILL()
@@ -147,13 +147,21 @@ def docinfo(raw):
 			'EMBEDDING' : None
 			# Type이 "EMBEDDING"일 때 extension("." 제외)
 		}
-		properties = reader.pop(2)
-		structure['PROPERTY'] = properties
-		'''
-		[TODO]
-		properties를 비트로 변환하고, 딕셔너리로 만들어서 넣을 예정.
-		19 page의 표18(바이너리 데이터 속성) 참고.
-		'''
+		properties_type = ['LINK', 'EMBEDDING', 'STORAGE(OLE 포함)']
+		properties_compression = ['STORAGE Default mode', 'COMPRESSION', 'NOT COMPRESSION']
+		properties_status = ['NOT ACCESS', 'ACCESS SUCCESS', 'ACCESS FAIL', 'ACCESS FAIL IGNORE']
+
+		properties = reader.intpop(2)
+		properties_bin = bin(properties)
+
+		properties_dic = {}
+		properties_dic['TYPE'] = properties_type[ int(properties_bin[ -4: ], 2) ]
+		properties_dic['COMPRESSION'] = properties_compression[ int(properties_bin[ -6:-4 ], 2) ]
+		properties_dic['STATUS'] = properties_status[ int(properties_bin[-10:-8 ], 2) ]
+
+		structure['PROPERTY'] = properties_dic
+		
+
 		size = reader.intpop(2)
 		data = reader.pop(2*data)
 		structure['LINK1_SIZE'] = size
