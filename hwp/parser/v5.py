@@ -429,50 +429,97 @@ def hwpsummaryinformation():
 	'''
 	return structure
 
-def scripts():
+def scripts_jscriptversion():
 	'''
-	:path: Scripts/
+	:path: Scripts/JScriptVersion
 	:document: [hwp v5.0] 13page
 	'''
 	structure = {
-		'JScriptVersion' : {
-			'HIGH' : None, #4
-			'LOW' : None #4
-		},
-		'DefalutJScript' : {
-			'HEADER_LENGTH' : None, #4
-			'HEADER' : None,
-			'SOURCE_LENGTH' : None, #4
-			'SOURCE' : None,
-			'PRE_SOURCE_LENGTH' : None, #4
-			'PRE_SOURCE' : None,
-			'POST_SOURCE_LENGTH' : None, #4
-			'POST_SOURCE' : None,
-			'END_FLAG' : None #4
-		}
+		'HIGH' : None, #4
+		'LOW' : None #4
 	}
-	return structure
-	
-def xmltemplate():
 	'''
-	:path: XMLTemplate/
+	[TODO]
+	미완.
+	'''
+	return structure
+
+def scripts_defaultjscript():
+	'''
+	:path: Scripts/DefalutJScript
 	:document: [hwp v5.0] 13page
 	'''
 	structure = {
-		'_SchemaName' : {
-			
-		}
-		'Schema' : {
-			
-		}
-		'Instance' : {
-			
-		}
+		'HEADER_LENGTH' : None, #4
+		'HEADER' : None,
+		'SOURCE_LENGTH' : None, #4
+		'SOURCE' : None,
+		'PRE_SOURCE_LENGTH' : None, #4
+		'PRE_SOURCE' : None,
+		'POST_SOURCE_LENGTH' : None, #4
+		'POST_SOURCE' : None,
+		'END_FLAG' : None #4
 	}
+	'''
+	[TODO]
+	미완.
+	'''
+	return structure
+
+
+def xmltemplate_schemaname():
+	'''
+	:path: XMLTemplate/_SchemaName
+	:document: [hwp v5.0] 14page
+	'''
+	structure = {
+		'LENGTH' : None, #4
+		'VALUE' : None # LENGTH * 2
+	}
+	'''
+	[TODO]
+	미완.
+	'''
+	return structure
+
+
+
+def xmltemplate_schema():
+	'''
+	:path: XMLTemplate/Schema
+	:document: [hwp v5.0] 14page
+	'''
+	structure = {
+		'LENGTH' : None, #4
+		'VALUE' : None # LENGTH * 2
+	}
+	'''
+	[TODO]
+	미완.
+	'''
 	return structure
 	
+def xmltemplate_instance():
+	'''
+	:path: XMLTemplate/Instance
+	:document: [hwp v5.0] 14page
+	'''
+	structure = {
+		'LENGTH' : None, #4
+		'VALUE' : None # LENGTH * 2
+	}
+	'''
+	[TODO]
+	미완.
+	'''
+	return structure
 	
-	
+
+def dochistory():
+	return
+
+def bibliography():
+	return
 	
 	
 	
