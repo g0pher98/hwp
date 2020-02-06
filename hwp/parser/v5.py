@@ -177,6 +177,7 @@ def docinfo(raw):
 		data = reader.pop(2*data)
 		structure['EMBEDDING_SIZE'] = size
 		structure['EMBEDDING'] = data
+		
 		return structure
 	
 	def HWPTAG_FACE_NAME():
@@ -227,12 +228,24 @@ def docinfo(raw):
 		fontname = reader.pop(len3 * 2)
 		structure['BASIC_FONTNAME'] = fontname.decode()
 		
-		'''
-		return 미완
-		'''
-		return
+		
+		return structure
 	
 	def HWPTAG_BORDER_FILL():
+		'''
+		:reference: [hwp v5.0] Page 21
+		'''
+		structure = {
+			'PROPERTY' : None, 
+			'BORDERTYPE' : None,
+			'BORDER_BOLD' : None,
+			'BORDER_COLOR' : None,
+			'DIAGONALTYPE' : None,
+			'DIAGONAL_BOLD' : None,
+			'DIAGONAL_COLOR' : None,
+			'FILL_INFORMATION' : None
+		}
+
 		'''
 		[TODO]
 		미완.
