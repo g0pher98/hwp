@@ -180,21 +180,55 @@ def docinfo(raw):
 		return structure
 	
 	def HWPTAG_FACE_NAME():
+		'''
+		:reference: [hwp v5.0] Page 20
+		'''
 		structure = {
 			'PROPERTY' : None,
-			'FONTNAME_LEN' : None,
+			'FONTNAME_LEN' : None, # len1
 			'FONTNAME' : None,
 			'REPLACED_FONTTYPE' : None,
-			'REPLACED_FONTNAME_LEN' : None,
+			'REPLACED_FONTNAME_LEN' : None, # len2
 			'REPLACED_FONTNAME' : None,
 			'FONTTYPE_INFO' : None,
-			
+			'BASIC_FONTNAME_LEN' : None, # len3
+			'BASIC_FONTNAME' : None 
 		}
 		properties = reader.intpop(1)
 		structure['property'] = properties
+		
+		len1 = reader.intpop(2)
+		structure['FONTNAME_LEN'] = len1
+		fontname = reader.pop(len1 * 2)
+		structure['FONTNAME'] = fontname.decode()
+
+		replaced_fonttype = ['Enable to know', 'TTF', 'HFT']	# TTF:트루타입, HFT:한글전용
+		structure['REPLACED_FONTTYPE'] = replaced_fonttype[ reader.intpop(1) ]
+		len2 = reader.intpop(2)
+		structure['REPLACED_FONTNAME_LEN'] = len2
+		fontname = reader.pop(len2 * 2)
+		structure['REPLACED_FONTNAME'] = fontname.decode()
+
+		fonttype = {}
+		fonttype['글꼴 계열'] = reader.pop(1).decode()
+		fonttype['세리프 유형'] = reader.pop(1).decode()
+		fonttype['굵기'] = reader.pop(1).decode()
+		fonttype['비례'] = reader.pop(1).decode()
+		fonttype['대조'] = reader.pop(1).decode()
+		fonttype['스트로크 편차'] = reader.pop(1).decode()
+		fonttype['자획 유형'] = reader.pop(1).decode()
+		fonttype['글자형'] = reader.pop(1).decode()
+		fonttype['중간선'] = reader.pop(1).decode()
+		fonttype['X-높이'] = reader.pop(1).decode()
+		structure['FONTTYPE_INFO'] = fonttype
+
+		len3 = reader.intpop(2)
+		structure['BASIC_FONTNAME_LEN'] = len3
+		fontname = reader.pop(len3 * 2)
+		structure['BASIC_FONTNAME'] = fontname.decode()
+		
 		'''
-		[TODO]
-		미완.
+		return 미완
 		'''
 		return
 	
