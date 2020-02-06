@@ -318,52 +318,92 @@ def bodytext_section(raw):
 	structure['HWPTAG_VIDEO_DATA'] = HWPTAG_VIDEO_DATA(),
 	structure['HWPTAG_SHAPE_COMPONENT_UNKNOWN'] = reader.pop(36)
 	
+	def HWPTAG_PARA_HEADER():
+		'''
+		:document: [hwp v5.0] 33page, 표 58
+		'''
+		structure = {
+			'text' : reader.intpop(4),
+			'control mask' : reader.intpop(4),
+			'문단 모양 아이디 참조값' : reader.intpop(2),
+			'문단 스타일 아이디 참조값' : reader.intpop(1),
+			'단 나누기 종류' : reader.intpop(1), # 표 59
+			'글자 모양 정보 수' : reader.intpop(2),
+			'range tag 정보 수' : reader.intpop(2),
+			'각 줄에 대한 align에 대한 정보 수' : reader.pop(2),
+			'문단 Instance ID' : reader.intpop(4)
+		}
+		if "버전 > 5.0.3.2":
+			structure['변경추적 병합 문단여부'] = reader.intpop(2)
+		return structure
+	
 	def HWPTAG_PARA_TEXT():
 		'''
-		[TODO]
-		미완.
+		:document: [hwp v5.0] 34page, 표 60
 		'''
-		return
+		return reader.pop(2*nchars) #?
 	
 	def HWPTAG_PARA_CHAR_SHAPE():
 		'''
-		[TODO]
-		미완.
+		:document: [hwp v5.0] 표 61
 		'''
-		return
+		structure = {
+			'글자 모양이 바뀌는 시작 위치' : reader.intpop(4),
+			'글자 모양 ID' : reader.intpop(4)
+		}
+		return structure
 	
 	def HWPTAG_PARA_LINE_SEG():
 		'''
-		[TODO]
-		미완.
+		:document: [hwp v5.0] 35page, 표 62
 		'''
-		return
+		structure = {
+			'텍스트 시작 위치' : reader.intpop(4),
+			'줄의 세로 위치' : reader.intpop(4),
+			'줄의 높이' : reader.intpop(4),
+			'텍스트 부분의 높이' : reader.intpop(4),
+			'줄의 세로위치에서 베이스라인까지 거리' : reader.intpop(4),
+			'줄간격' : reader.intpop(4),
+			'컬럼에서의 시작 위치' : reader.intpop(4),
+			'세그먼트의 폭' : reader.intpop(4),
+			'태그' : bin(reader.intpop(4))
+		}
+		return structure
 	
 	def HWPTAG_PARA_RANGE_TAG():
 		'''
-		[TODO]
-		미완.
+		:document: [hwp v5.0] 36page, 표 63
 		'''
-		return
+		structure = {
+			'영역 시작' : reader.intpop(4),
+			'영역 끝' : reader.intpop(4),
+			'태그' : reader.intpop(4)
+		}
+		return structure
 	
 	def HWPTAG_TABLE():
 		'''
-		[TODO]
-		미완.
+		:document: [hwp v5.0] 39page, 표 74
 		'''
-		return
+		structure = {
+			'개체 공통 속성' : reader.intpop(n), #?
+			'표 개체 속성' : reader.intpop(n1), #?
+			'셀 리스트' : reader.intpop(n2) #?
+		}
+		return structure
 	
 	def HWPTAG_SHAPE_COMPONENT_POLYGON():
 		'''
-		[TODO]
-		미완.
+		:document: [hwp v5.0] 45page, 표 99
 		'''
+		structure = {
+			'count of '
+		}
 		return
 	
 	def HWPTAG_SHAPE_COMPONENT_CURVE():
 		'''
-		[TODO]
-		미완.
+		:document: [hwp v5.0] 46page, 표 103
 		'''
 		return
 	
