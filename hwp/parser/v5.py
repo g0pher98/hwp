@@ -245,6 +245,12 @@ def docinfo(raw):
 			'DIAGONAL_COLOR' : None,
 			'FILL_INFORMATION' : None
 		}
+		
+		effect_3d = ['3D Nonexistent', '3D Existent']
+		effect_shadow = ['Shadow Nonexistent', 'Shadow Existent']
+		Slash_diagonal = ['None', '', 'Slash', 'Bottom Edge', '', '', 'Right Edge', 'Bottom&Right Edge']
+		BackSlash_diagonal = ['None', '', 'Back Slash', 'Bottom Edge', '', '', 'Left Edge', 'Bottom&Left Edge']
+		
 
 		'''
 		[TODO]
