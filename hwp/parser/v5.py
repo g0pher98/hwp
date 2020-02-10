@@ -152,13 +152,19 @@ def docinfo(raw):
 		properties_status = ['NOT ACCESS', 'ACCESS SUCCESS', 'ACCESS FAIL', 'ACCESS FAIL IGNORE']
 
 		properties = reader.intpop(2)
-		properties_bin = bin(properties)
+		properties_bin = bin(properties)[2:]
 
 		properties_dic = {}
+		# little endian
+		'''
 		properties_dic['TYPE'] = properties_type[ int(properties_bin[ -4: ], 2) ]
 		properties_dic['COMPRESSION'] = properties_compression[ int(properties_bin[ -6:-4 ], 2) ]
 		properties_dic['STATUS'] = properties_status[ int(properties_bin[-10:-8 ], 2) ]
-
+		'''
+		properties_dic['TYPE'] = properties_type[ int(properties_bin[ :4 ], 2) ]
+		properties_dic['COMPRESSION'] = properties_compression[ int(properties_bin[ 4:6 ], 2) ]
+		properties_dic['STATUS'] = properties_status[ int(properties_bin[ 8:10 ], 2) ]
+		
 		structure['PROPERTY'] = properties_dic
 		
 
@@ -233,7 +239,7 @@ def docinfo(raw):
 	
 	def HWPTAG_BORDER_FILL():
 		'''
-		:reference: [hwp v5.0] Page 21
+		:reference: [hwp v5.0] Page 21 (26/71)
 		'''
 		structure = {
 			'PROPERTY' : None, 
@@ -246,12 +252,51 @@ def docinfo(raw):
 			'FILL_INFORMATION' : None
 		}
 		
-		effect_3d = ['3D Nonexistent', '3D Existent']
-		effect_shadow = ['Shadow Nonexistent', 'Shadow Existent']
+		effect_3d = ['3D Nonexistent', '3D Existent']  # 3D 효과의 유무
+		effect_shadow = ['Shadow Nonexistent', 'Shadow Existent']  # 그림자 효과의 유무
 		Slash_diagonal = ['None', '', 'Slash', 'Bottom Edge', '', '', 'Right Edge', 'Bottom&Right Edge']
+		# Slash 대각선 모양 (시계 방향으로 각각의 대각선 유무를 나타냄)
 		BackSlash_diagonal = ['None', '', 'Back Slash', 'Bottom Edge', '', '', 'Left Edge', 'Bottom&Left Edge']
+		# BackSlash 대각선 모양 (반시계 방향으로 각각의 대각선 유무를 나타냄)
+		Slash_DG = "Slash 대각선 꺾은선"
+		BackSlash_DG = "BackSlash 대각선 꺾은선"
+		Slash_180 = ['회전 X', '회전 O']  # Slash 대각선 모양 180도 회전 여부
+		BackSlash_180 = ['회전 X', '회전 O']  # BackSlash 대각선 모양 180도 회전 여부
+		Center_line = ['중심선 X', '중심선 O']  # 중심선 유무
 		
-
+		properties = reader.intpop(2)
+		properties_bin = bin(properties)[2:]
+		
+		properties_dic = {}
+		properties_dic['3D'] = effect_3d[ properties_bin[0] ]
+		properties_dic['SHADOW'] = effect_shadow[ properties_bin[1] ]
+		properties_dic['SLASH_DIAGONAL'] = Slash_diagonal[ properties_bin[2:5] ]
+		properties_dic['BACKSLASH_DIAGONAL'] = BackSlash_diagonal[ properties_bin[5:8] ]
+		properties_dic['SLASH_DG'] = Slash_DG[ properties_bin[8:10] ]
+		properties_dic['BACKSLASH_DG'] = BackSlash_DG[ properties_bin[10] ]
+		properties_dic['SLASH_180'] = Slash_180[ properties_bin[11] ]
+		properties_dic['BACKSLASH_180'] = BackSlash_180[ properties_bin[12] ]
+		properties_dic['CENTER_LINE'] = Center_line[ properties_bin[13] ]
+		
+		structure['PROPERTY'] = properties_dic
+		
+		BorderType = ['실선', '긴 점선', '점선', '-.-.-.-.', '-..-..-..', 'Dash보다 긴 선분의 반복', 
+					  'Dot보다 큰 동그라미의 반복', '2중선', '가는선 + 굵은선 2중선', '굵은선 + 가는선 2중선', 
+					  '가는선 + 굵은선 + 가는선 3중선', '물결', '물결 2중선', '두꺼운 3D', 
+					  '두꺼운 3D(광원 반대)', '3D 단선', '3D 단선(광원 반대)']
+		
+		# 4방향 테두리선 종류
+		BorderLine_Type = [ BorderType[reader.intpop(1)], BorderType[reader.intpop(1)],
+						   BorderType[reader.intpop(1)], BorderType[reader.intpop(1)] ]
+		structure['BORDERTYPE'] = BorderType
+		
+		BorderBold = [ '0.1', '0.12', '0.15', '0.2', '0.25', '0.3', '0.4', '0.5', 
+					  '0.6', '0.7', '1.0', '1.5', '2.0', '3.0', '4.0', '5.0' ]
+		BorderLine_Bold = [ BorderBold[reader.intpop(1)], BorderBold[reader.intpop(1)],
+						  BorderBold[reader.intpop(1)], BorderBold[reader.intpop(1)] ]
+		structure['BORDER_BOLD'] = BorderLine_Bold
+		
+		
 		'''
 		[TODO]
 		미완.
