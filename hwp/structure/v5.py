@@ -1,12 +1,3 @@
-
-def test():
-	import olefile, pprint
-	import hwp.parser.v5 as v5
-	fh_data = olefile.OleFileIO("test.hwp").openstream('FileHeader').read()
-	pprint.pprint(v5.fileheader(fh_data))
-	pprint.pprint(v5.docinfo(fh_data[256:]))
-
-	
 class Reader:
 	def __init__(self, raw, start_index=0):
 		self.focus = start_index
